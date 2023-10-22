@@ -1,6 +1,7 @@
 package vc.command;
 
 import org.rusherhack.client.api.feature.command.Command;
+import org.rusherhack.client.api.feature.command.arg.PlayerReference;
 import org.rusherhack.client.api.utils.ChatUtils;
 import org.rusherhack.core.command.annotations.CommandExecutor;
 import vc.api.VcApi;
@@ -20,18 +21,19 @@ public class SeenCommand extends Command {
     }
 
     @CommandExecutor
-    @CommandExecutor.Argument({"playerName"})
-    private void seenPlayerName(final String playerName) {
+    @CommandExecutor.Argument({"player"})
+    private String seenPlayerName(final PlayerReference player) {
         ForkJoinPool.commonPool().execute(() -> {
-            Optional<SeenResponse> firstSeen = this.api.getFirstSeen(playerName);
-            Optional<SeenResponse> lastSeen = this.api.getLastSeen(playerName);
+            Optional<SeenResponse> firstSeen = this.api.getFirstSeen(player);
+            Optional<SeenResponse> lastSeen = this.api.getLastSeen(player);
             if (firstSeen.isEmpty() && lastSeen.isEmpty()) {
-                ChatUtils.print("Error: " + playerName + " not found!");
+                ChatUtils.print("Error: " + player.name() + " not found!");
             }
             String out = "";
             out += firstSeen.map(seenResponse -> "\nFirst seen: " + seenResponse.time().format(formatter)).orElse("");
             out += lastSeen.map(seenResponse -> "\nLast seen: " + seenResponse.time().format(formatter)).orElse("");
             ChatUtils.print(out);
         });
+        return null;
     }
 }

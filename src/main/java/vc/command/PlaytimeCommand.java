@@ -1,6 +1,7 @@
 package vc.command;
 
 import org.rusherhack.client.api.feature.command.Command;
+import org.rusherhack.client.api.feature.command.arg.PlayerReference;
 import org.rusherhack.client.api.utils.ChatUtils;
 import org.rusherhack.core.command.annotations.CommandExecutor;
 import vc.api.VcApi;
@@ -17,16 +18,15 @@ public class PlaytimeCommand extends Command {
     }
 
     @CommandExecutor
-    @CommandExecutor.Argument({"playerName"})
-    public void playtime(final String playerName) {
+    @CommandExecutor.Argument({"player"})
+    public String playtime(final PlayerReference player) {
         ForkJoinPool.commonPool().execute(() -> {
-            var playtime = this.api.getPlaytime(playerName);
-            if (playtime.isEmpty()) {
-                ChatUtils.print("Error: " + playerName + " not found!");
-                return;
-            }
-            ChatUtils.print(formatDuration(Duration.ofSeconds(playtime.get().playtimeSeconds())));
+            var playtime = this.api.getPlaytime(player);
+            playtime.ifPresentOrElse(
+                pt -> ChatUtils.print(formatDuration(Duration.ofSeconds(pt.playtimeSeconds()))),
+                () -> ChatUtils.print("Error: " + player.name() + " not found!"));
         });
+        return null;
     }
 
     public static String formatDuration(Duration duration) {

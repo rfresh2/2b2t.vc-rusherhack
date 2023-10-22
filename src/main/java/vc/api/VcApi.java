@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.stream.JsonReader;
+import org.rusherhack.client.api.feature.command.arg.PlayerReference;
 import org.rusherhack.core.logging.ILogger;
 import vc.api.model.PlaytimeResponse;
 import vc.api.model.SeenResponse;
@@ -33,16 +34,16 @@ public class VcApi {
             .create();
     }
 
-    public Optional<SeenResponse> getLastSeen(final String playerName) {
-        return get("https://api.2b2t.vc/seen?playerName=" + playerName, SeenResponse.class);
+    public Optional<SeenResponse> getLastSeen(final PlayerReference player) {
+        return get("https://api.2b2t.vc/seen?uuid=" + player.playerInfo().getProfile().getId(), SeenResponse.class);
     }
 
-    public Optional<SeenResponse> getFirstSeen(final String playerName) {
-        return get("https://api.2b2t.vc/firstSeen?playerName=" + playerName, SeenResponse.class);
+    public Optional<SeenResponse> getFirstSeen(final PlayerReference player) {
+        return get("https://api.2b2t.vc/firstSeen?uuid=" + player.playerInfo().getProfile().getId(), SeenResponse.class);
     }
 
-    public Optional<PlaytimeResponse> getPlaytime(final String playerName) {
-        return get("https://api.2b2t.vc/playtime?playerName=" + playerName, PlaytimeResponse.class);
+    public Optional<PlaytimeResponse> getPlaytime(final PlayerReference player) {
+        return get("https://api.2b2t.vc/playtime?uuid=" + player.playerInfo().getProfile().getId(), PlaytimeResponse.class);
     }
 
     private <T> Optional<T> get(final String uri, final Class<T> responseType) {
