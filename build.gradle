@@ -10,7 +10,6 @@ buildscript {
 plugins {
 	id 'fabric-loom' version '1.2-SNAPSHOT'
 	id 'maven-publish'
-	id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 version = project.mod_version
@@ -24,8 +23,6 @@ configurations {
 	rusherhackApi
 	rusherhackApi.canBeResolved(true)
 	compileOnly.extendsFrom(rusherhackApi)
-	shade
-	implementation.extendsFrom(shade)
 }
 
 repositories {
@@ -55,10 +52,6 @@ dependencies {
 
 	//rusherhack api
 	rusherhackApi "org.rusherhack:rusherhack-api:1.20.1-SNAPSHOT"
-	shade 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.3'
-	shade 'com.fasterxml.jackson.core:jackson-databind:2.15.3'
-	shade 'com.fasterxml.jackson.core:jackson-core:2.15.3'
-//	shade 'com.fasterxml.jackson.core:jackson-annotations:2.15.3'
 }
 
 loom {
@@ -93,23 +86,5 @@ java {
 	if (JavaVersion.current() < javaVersion) {
 		toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
 	}
-//	archivesBaseName = project.archives_base_name
-}
-
-shadowJar {
-	configurations = [project.configurations.shade]
-	archiveClassifier.set('shadow')
-	manifest {
-		attributes(
-				"Minecraft-Version": project.minecraft_version
-		)
-	}
-	exclude 'com/fasterxml/jackson/annotation/**'
-	exclude 'META-INF/**'
-//	relocate 'com/fasterxml/jackson', 'vc/jackson'
-}
-
-remapJar {
-	dependsOn shadowJar
-	inputFile.set shadowJar.archiveFile.get()
+	archivesBaseName = project.archives_base_name
 }
