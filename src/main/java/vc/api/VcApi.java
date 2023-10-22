@@ -1,20 +1,17 @@
 package vc.api;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.stream.JsonReader;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.rusherhack.core.logging.ILogger;
 import vc.api.model.PlaytimeResponse;
 import vc.api.model.SeenResponse;
 
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.OffsetDateTime;
 import java.util.Optional;
 
 import static java.net.http.HttpResponse.BodyHandlers.ofInputStream;
@@ -22,15 +19,15 @@ import static java.net.http.HttpResponse.BodyHandlers.ofInputStream;
 public class VcApi {
     private final HttpClient httpClient;
     private final ILogger logger;
-    private final Gson gson;
+    private final ObjectMapper objectMapper;
 
     public VcApi(final ILogger logger) {
         this.logger = logger;
         this.httpClient = HttpClient.newBuilder()
             .build();
-        this.gson = new GsonBuilder()
-            .registerTypeAdapter(OffsetDateTime.class, (JsonDeserializer<OffsetDateTime>) (json, typeOfT, context) -> OffsetDateTime.parse(json.getAsString()))
-            .create();
+        this.objectMapper = new ObjectMapper();
+        this.objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        this.objectMapper.registerModule(new JavaTimeModule());
     }
 
     public Optional<SeenResponse> getLastSeen(final String playerName) {
@@ -53,9 +50,7 @@ public class VcApi {
                 .setHeader("User-Agent", "rusherhack/1.0")
                 .build();
             HttpResponse<InputStream> response = this.httpClient.send(request, ofInputStream());
-            try (JsonReader reader = new JsonReader(new InputStreamReader(response.body()))) {
-                return Optional.ofNullable(this.gson.fromJson(reader, responseType));
-            }
+            return Optional.ofNullable(this.objectMapper.readValue(response.body(), responseType));
         } catch (final Exception e) {
             logger.error("Failed querying " + uri);
             e.printStackTrace();
