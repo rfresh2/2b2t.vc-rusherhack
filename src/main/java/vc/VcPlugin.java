@@ -5,17 +5,21 @@ import org.rusherhack.client.api.plugin.Plugin;
 import vc.api.VcApi;
 import vc.command.PlaytimeCommand;
 import vc.command.SeenCommand;
+import vc.hud.Queue2b2tHudElement;
 
 public class VcPlugin extends Plugin {
     @Override
     public void onLoad() {
-        this.getLogger().info(this.getName() + " loaded!");
-        final VcApi vcApi = new VcApi(getLogger());
+        final VcApi api = new VcApi(getLogger());
         //creating and registering a new command
-        final SeenCommand seenCommand = new SeenCommand(vcApi);
-        final PlaytimeCommand playtimeCommand = new PlaytimeCommand(vcApi);
+        final SeenCommand seenCommand = new SeenCommand(api);
+        final PlaytimeCommand playtimeCommand = new PlaytimeCommand(api);
         RusherHackAPI.getCommandManager().registerFeature(seenCommand);
         RusherHackAPI.getCommandManager().registerFeature(playtimeCommand);
+        final Queue2b2tHudElement queueHud = new Queue2b2tHudElement(api);
+        RusherHackAPI.getHudManager().registerFeature(queueHud);
+
+        this.getLogger().info(this.getName() + " loaded!");
     }
 
     @Override

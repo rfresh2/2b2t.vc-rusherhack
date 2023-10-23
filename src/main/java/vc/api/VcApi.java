@@ -7,6 +7,7 @@ import com.google.gson.stream.JsonReader;
 import org.rusherhack.client.api.feature.command.arg.PlayerReference;
 import org.rusherhack.core.logging.ILogger;
 import vc.api.model.PlaytimeResponse;
+import vc.api.model.QueueStatus;
 import vc.api.model.SeenResponse;
 
 import java.io.InputStream;
@@ -44,6 +45,10 @@ public class VcApi {
 
     public Optional<PlaytimeResponse> getPlaytime(final PlayerReference player) {
         return get("https://api.2b2t.vc/playtime?uuid=" + player.playerInfo().getProfile().getId(), PlaytimeResponse.class);
+    }
+
+    public Optional<QueueStatus> getQueueStatus() {
+        return get("https://api.2b2t.vc/queue", QueueStatus.class);
     }
 
     private <T> Optional<T> get(final String uri, final Class<T> responseType) {
