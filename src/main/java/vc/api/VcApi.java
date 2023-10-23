@@ -36,15 +36,15 @@ public class VcApi {
     }
 
     public Optional<SeenResponse> getLastSeen(final PlayerReference player) {
-        return get("https://api.2b2t.vc/seen?uuid=" + player.playerInfo().getProfile().getId(), SeenResponse.class);
+        return get("https://api.2b2t.vc/seen?playerName=" + player.name(), SeenResponse.class);
     }
 
     public Optional<SeenResponse> getFirstSeen(final PlayerReference player) {
-        return get("https://api.2b2t.vc/firstSeen?uuid=" + player.playerInfo().getProfile().getId(), SeenResponse.class);
+        return get("https://api.2b2t.vc/firstSeen?playerName=" + player.name(), SeenResponse.class);
     }
 
     public Optional<PlaytimeResponse> getPlaytime(final PlayerReference player) {
-        return get("https://api.2b2t.vc/playtime?uuid=" + player.playerInfo().getProfile().getId(), PlaytimeResponse.class);
+        return get("https://api.2b2t.vc/playtime?playerName=" + player.name(), PlaytimeResponse.class);
     }
 
     public Optional<QueueStatus> getQueueStatus() {
