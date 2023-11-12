@@ -27,8 +27,10 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: build
-      - name: Publish Artifact
+
+      - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: fbsc-artifact
-          path: build/libs/
+          name: artifact
+          path: |
+            build/libs/2b2t.vc-rusherhack-*.jar
