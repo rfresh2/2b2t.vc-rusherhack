@@ -29,9 +29,6 @@ jobs:
         with:
           arguments: build
 
-      - name: Remove shadow jar
-        run: rm build/libs/2b2t.vc-rusherhack-*shadow.jar
-
       - name: Release Artifact
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
