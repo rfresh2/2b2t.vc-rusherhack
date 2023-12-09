@@ -16,7 +16,7 @@ public class SeenCommand extends Command {
 
     private final VcApi api;
     public SeenCommand(final VcApi api) {
-        super("seenvc", "Gets when a player was first and last seen on 2b2t");
+        super("vcseen", "Gets when a player was first and last seen on 2b2t");
         this.api = api;
     }
 

@@ -13,9 +13,9 @@ public class PlaytimeCommand extends Command {
     private final VcApi api;
 
     public PlaytimeCommand(final VcApi api) {
-        super("playtimevc", "Gets a player's 2b2t playtime");
+        super("vcplaytime", "Gets a player's 2b2t playtime");
         this.api = api;
-        addAliases("ptvc");
+        addAliases("vcpt");
     }
 
     @CommandExecutor

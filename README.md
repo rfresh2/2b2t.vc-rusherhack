@@ -14,8 +14,8 @@ Place the jar into your `.minecraft/rusherhack/plugins` folder
 
 ## Commands
 
-* `seenvc <player>` - First and last time a player was seen on 2b2t
-* `playtimevc <player>` - Gets the playtime of a player on 2b2t
+* `vcseen <player>` - First and last time a player was seen on 2b2t
+* `vcplaytime <player>` - Gets the playtime of a player on 2b2t
 
 ## HUD Elements
 
