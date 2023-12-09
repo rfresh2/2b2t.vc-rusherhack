@@ -16,7 +16,8 @@ Place the jar into your `.minecraft/rusherhack/plugins` folder
 
 * `vcseen <player>` - First and last time a player was seen on 2b2t
 * `vcplaytime <player>` - Gets the playtime of a player on 2b2t
+* `queue` - Gets the current 2b2t queue length and wait ETA
 
 ## HUD Elements
 
-* 2b2t Queue - Displays the current 2b2t queue length for both prio and regular
+* 2b2t Queue - Displays the current 2b2t queue lengths
