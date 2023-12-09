@@ -1,14 +1,14 @@
 package vc.command;
 
+import org.jetbrains.annotations.Nullable;
 import org.rusherhack.client.api.feature.command.Command;
 import org.rusherhack.client.api.feature.command.arg.PlayerReference;
 import org.rusherhack.client.api.utils.ChatUtils;
 import org.rusherhack.core.command.annotations.CommandExecutor;
 import vc.api.VcApi;
-import vc.api.model.SeenResponse;
 
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 import java.util.concurrent.ForkJoinPool;
 
 public class SeenCommand extends Command {
@@ -24,16 +24,19 @@ public class SeenCommand extends Command {
     @CommandExecutor.Argument({"player"})
     private String seenPlayerName(final PlayerReference player) {
         ForkJoinPool.commonPool().execute(() -> {
-            Optional<SeenResponse> firstSeen = this.api.getFirstSeen(player);
-            Optional<SeenResponse> lastSeen = this.api.getLastSeen(player);
-            if (firstSeen.isEmpty() && lastSeen.isEmpty()) {
+            var apiResponse = this.api.getSeen(player);
+            if (apiResponse.isEmpty()) {
                 ChatUtils.print("Error: " + player.name() + " not found!");
             }
             String out = "";
-            out += firstSeen.map(seenResponse -> "\nFirst seen: " + seenResponse.time().format(formatter)).orElse("");
-            out += lastSeen.map(seenResponse -> "\nLast seen: " + seenResponse.time().format(formatter)).orElse("");
+            out += apiResponse.map(seenResponse -> "\nFirst seen: " + getSeenString(seenResponse.firstSeen())).orElse("");
+            out += apiResponse.map(seenResponse -> "\nLast seen: " + getSeenString(seenResponse.lastSeen())).orElse("");
             ChatUtils.print(out);
         });
         return null;
+    }
+
+    private String getSeenString(@Nullable final OffsetDateTime time) {
+        return time != null ? time.format(formatter) : "Never";
     }
 }

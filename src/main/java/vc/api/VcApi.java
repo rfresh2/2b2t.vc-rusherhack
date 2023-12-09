@@ -35,12 +35,8 @@ public class VcApi {
             .create();
     }
 
-    public Optional<SeenResponse> getLastSeen(final PlayerReference player) {
+    public Optional<SeenResponse> getSeen(final PlayerReference player) {
         return get("https://api.2b2t.vc/seen?playerName=" + player.name(), SeenResponse.class);
-    }
-
-    public Optional<SeenResponse> getFirstSeen(final PlayerReference player) {
-        return get("https://api.2b2t.vc/firstSeen?playerName=" + player.name(), SeenResponse.class);
     }
 
     public Optional<PlaytimeResponse> getPlaytime(final PlayerReference player) {
