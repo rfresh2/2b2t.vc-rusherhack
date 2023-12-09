@@ -6,6 +6,7 @@ import vc.api.VcApi;
 import vc.command.PlaytimeCommand;
 import vc.command.QueueCommand;
 import vc.command.SeenCommand;
+import vc.command.StatsCommand;
 import vc.hud.Queue2b2tHudElement;
 
 public class VcPlugin extends Plugin {
@@ -15,6 +16,7 @@ public class VcPlugin extends Plugin {
         RusherHackAPI.getCommandManager().registerFeature(new SeenCommand(api));
         RusherHackAPI.getCommandManager().registerFeature(new PlaytimeCommand(api));
         RusherHackAPI.getCommandManager().registerFeature(new QueueCommand(api));
+        RusherHackAPI.getCommandManager().registerFeature(new StatsCommand(api));
         final Queue2b2tHudElement queueHud = new Queue2b2tHudElement(api);
         RusherHackAPI.getHudManager().registerFeature(queueHud);
 

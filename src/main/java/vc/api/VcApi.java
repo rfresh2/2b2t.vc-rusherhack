@@ -9,6 +9,7 @@ import org.rusherhack.core.logging.ILogger;
 import vc.api.model.PlaytimeResponse;
 import vc.api.model.QueueStatus;
 import vc.api.model.SeenResponse;
+import vc.api.model.StatsResponse;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -45,6 +46,10 @@ public class VcApi {
 
     public Optional<QueueStatus> getQueueStatus() {
         return get("https://api.2b2t.vc/queue", QueueStatus.class);
+    }
+
+    public Optional<StatsResponse> getStats(final PlayerReference player) {
+        return get("https://api.2b2t.vc/stats/player?playerName=" + player.name(), StatsResponse.class);
     }
 
     private <T> Optional<T> get(final String uri, final Class<T> responseType) {

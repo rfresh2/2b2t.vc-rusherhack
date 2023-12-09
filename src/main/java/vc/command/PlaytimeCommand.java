@@ -9,6 +9,8 @@ import vc.api.VcApi;
 import java.time.Duration;
 import java.util.concurrent.ForkJoinPool;
 
+import static vc.util.FormatUtil.formatDuration;
+
 public class PlaytimeCommand extends Command {
     private final VcApi api;
 
@@ -23,19 +25,11 @@ public class PlaytimeCommand extends Command {
     public String playtime(final PlayerReference player) {
         ForkJoinPool.commonPool().execute(() -> {
             var playtime = this.api.getPlaytime(player);
-            playtime.ifPresentOrElse(
-                pt -> ChatUtils.print(formatDuration(Duration.ofSeconds(pt.playtimeSeconds()))),
-                () -> ChatUtils.print("Error: " + player.name() + " not found!"));
+            var out = playtime.map(
+                pt -> formatDuration(Duration.ofSeconds(pt.playtimeSeconds())))
+                .orElse("Error: " + player.name() + " not found!");
+            ChatUtils.print(out);
         });
         return null;
-    }
-
-    public static String formatDuration(Duration duration) {
-        final StringBuilder sb = new StringBuilder();
-        if (duration.toDaysPart() > 0) sb.append(duration.toDaysPart()).append("d ");
-        if (duration.toHoursPart() > 0) sb.append(duration.toHoursPart()).append("h ");
-        if (duration.toMinutesPart() > 0) sb.append(duration.toMinutesPart()).append("m ");
-        sb.append(duration.toSecondsPart()).append("s");
-        return sb.toString();
     }
 }

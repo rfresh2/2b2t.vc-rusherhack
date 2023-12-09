@@ -5,6 +5,7 @@ import org.rusherhack.client.api.feature.hud.ShortListHudElement;
 import org.rusherhack.core.setting.BooleanSetting;
 import vc.api.VcApi;
 import vc.api.model.QueueStatus;
+import vc.util.FormatUtil;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -41,16 +42,6 @@ public class Queue2b2tHudElement extends ShortListHudElement {
         });
     }
 
-    public static String formatDuration(Duration duration) {
-        final StringBuilder sb = new StringBuilder();
-        if (duration.toDaysPart() > 0) sb.append(duration.toDaysPart()).append("d ");
-        if (duration.toHoursPart() > 0) sb.append(duration.toHoursPart()).append("h ");
-        if (duration.toMinutesPart() > 0) sb.append(duration.toMinutesPart()).append("m ");
-        sb.append(duration.toSecondsPart()).append("s");
-        sb.append(" ago");
-        return sb.toString();
-    }
-
     @Override
     public Component[] getComponents() {
         // refresh every 5 mins in the background
@@ -66,7 +57,10 @@ public class Queue2b2tHudElement extends ShortListHudElement {
             prio = Component.literal("Prio: " + queueStatus.prio());
         }
         if (showUpdatedTime.getValue()) {
-            updated = Component.literal("Updated " + formatDuration(Duration.between(queueStatus.time().toInstant(), Instant.now())));
+            updated = Component
+                .literal("Updated "
+                             + FormatUtil.formatDuration(Duration.between(queueStatus.time().toInstant(), Instant.now()))
+                             + " ago");
         }
         return Stream.of(regular, prio, updated)
             .filter(Objects::nonNull)
