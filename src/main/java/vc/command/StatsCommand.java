@@ -25,7 +25,8 @@ public class StatsCommand extends Command {
         ForkJoinPool.commonPool().execute(() -> {
             var statsResponse = api.getStats(player);
             var out = statsResponse.map(s ->
-                "Joins: " + s.joinCount() +
+                player.name() + " Stats" +
+                "\nJoins: " + s.joinCount() +
                 "\nLeaves: " + s.leaveCount() +
                 "\nFirst Seen: " + getSeenString(s.firstSeen()) +
                 "\nLast Seen: " + getSeenString(s.lastSeen()) +

@@ -25,9 +25,10 @@ public class PlaytimeCommand extends Command {
     public String playtime(final PlayerReference player) {
         ForkJoinPool.commonPool().execute(() -> {
             var playtime = this.api.getPlaytime(player);
-            var out = playtime.map(
-                pt -> formatDuration(Duration.ofSeconds(pt.playtimeSeconds())))
-                .orElse("Error: " + player.name() + " not found!");
+            var out = player.name() + " Playtime\n" +
+                playtime.map(
+                    pt -> formatDuration(Duration.ofSeconds(pt.playtimeSeconds())))
+                    .orElse("Error: " + player.name() + " not found!");
             ChatUtils.print(out);
         });
         return null;

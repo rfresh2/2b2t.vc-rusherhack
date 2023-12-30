@@ -25,7 +25,7 @@ public class SeenCommand extends Command {
             if (apiResponse.isEmpty()) {
                 ChatUtils.print("Error: " + player.name() + " not found!");
             }
-            String out = "";
+            String out = player.name() + " Seen";
             out += apiResponse.map(seenResponse -> "\nFirst seen: " + getSeenString(seenResponse.firstSeen())).orElse("");
             out += apiResponse.map(seenResponse -> "\nLast seen: " + getSeenString(seenResponse.lastSeen())).orElse("");
             ChatUtils.print(out);
