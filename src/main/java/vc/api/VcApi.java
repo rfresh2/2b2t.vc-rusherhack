@@ -17,6 +17,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
@@ -35,6 +36,7 @@ public class VcApi {
             .build();
         this.gson = new GsonBuilder()
             .registerTypeAdapter(OffsetDateTime.class, (JsonDeserializer<OffsetDateTime>) (json, typeOfT, context) -> OffsetDateTime.parse(json.getAsString()))
+            .setLenient()
             .create();
     }
 
@@ -59,7 +61,8 @@ public class VcApi {
             HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .uri(URI.create(uri))
-                .setHeader("User-Agent", "rusherhack/1.0")
+                .setHeader("User-Agent", "rusherhack/" + version)
+                .timeout(Duration.ofSeconds(10))
                 .build();
             HttpResponse<InputStream> response = this.httpClient.send(request, ofInputStream());
             try (JsonReader reader = new JsonReader(new InputStreamReader(response.body()))) {
