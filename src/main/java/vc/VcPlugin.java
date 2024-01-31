@@ -12,7 +12,7 @@ import vc.hud.Queue2b2tHudElement;
 public class VcPlugin extends Plugin {
     @Override
     public void onLoad() {
-        final VcApi api = new VcApi(getLogger());
+        final VcApi api = new VcApi(getLogger(), getVersion());
         RusherHackAPI.getCommandManager().registerFeature(new SeenCommand(api));
         RusherHackAPI.getCommandManager().registerFeature(new PlaytimeCommand(api));
         RusherHackAPI.getCommandManager().registerFeature(new QueueCommand(api));
@@ -20,7 +20,7 @@ public class VcPlugin extends Plugin {
         final Queue2b2tHudElement queueHud = new Queue2b2tHudElement(api);
         RusherHackAPI.getHudManager().registerFeature(queueHud);
 
-        this.getLogger().info(this.getName() + " loaded!");
+        this.getLogger().info(this.getName() + " " + getVersion() + " loaded!");
     }
 
     @Override
@@ -34,7 +34,7 @@ public class VcPlugin extends Plugin {
 
     @Override
     public String getVersion() {
-        return "1.2";
+        return "${version}";
     }
 
     @Override

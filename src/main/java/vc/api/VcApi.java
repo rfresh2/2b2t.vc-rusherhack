@@ -26,9 +26,11 @@ public class VcApi {
     private final HttpClient httpClient;
     private final ILogger logger;
     private final Gson gson;
+    private final String version;
 
-    public VcApi(final ILogger logger) {
+    public VcApi(final ILogger logger, final String version) {
         this.logger = logger;
+        this.version = version;
         this.httpClient = HttpClient.newBuilder()
             .build();
         this.gson = new GsonBuilder()
