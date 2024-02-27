@@ -12,7 +12,7 @@ import vc.hud.Queue2b2tHudElement;
 public class VcPlugin extends Plugin {
     @Override
     public void onLoad() {
-        final VcApi api = new VcApi(getLogger(), getVersion());
+        final VcApi api = new VcApi(getLogger(), getPluginVersion());
         RusherHackAPI.getCommandManager().registerFeature(new SeenCommand(api));
         RusherHackAPI.getCommandManager().registerFeature(new PlaytimeCommand(api));
         RusherHackAPI.getCommandManager().registerFeature(new QueueCommand(api));
@@ -20,30 +20,15 @@ public class VcPlugin extends Plugin {
         final Queue2b2tHudElement queueHud = new Queue2b2tHudElement(api);
         RusherHackAPI.getHudManager().registerFeature(queueHud);
 
-        this.getLogger().info(this.getName() + " " + getVersion() + " loaded!");
+        this.getLogger().info(this.getName() + " " + getPluginVersion() + " loaded!");
     }
 
     @Override
     public void onUnload() {
     }
 
-    @Override
-    public String getName() {
-        return "2b2t.vc";
-    }
-
-    @Override
-    public String getVersion() {
+    // value injected during build
+    public String getPluginVersion() {
         return "${version}";
-    }
-
-    @Override
-    public String getDescription() {
-        return "2b2t Data and Statistics API";
-    }
-
-    @Override
-    public String[] getAuthors() {
-        return new String[]{"rfresh2"};
     }
 }
