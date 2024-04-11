@@ -34,7 +34,8 @@ public class StatsCommand extends Command {
                 "\nPlaytime (Last 30 Days): " + formatDuration(Duration.ofSeconds(s.playtimeSecondsMonth())) +
                 "\nDeaths: " + s.deathCount() +
                 "\nKills: " + s.killCount() +
-                "\nChats: " + s.chatsCount())
+                "\nChats: " + s.chatsCount() +
+                "\nPrio: " + (s.prio() ? "Yes" : "No"))
                 .orElse("Error: " + player.name() + " not found!");
             ChatUtils.print(out);
         });

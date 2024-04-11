@@ -48,7 +48,7 @@ dependencies {
 	//mojmap + parchment mappings
 	mappings loom.layered() {
 		officialMojangMappings()
-		parchment("org.parchmentmc.data:parchment-1.20.3:2023.12.31@zip")
+		parchment("org.parchmentmc.data:parchment-1.20.4:2024.02.25@zip")
 	}
 	rusherhackApi "org.rusherhack:rusherhack-api:1.20.4-SNAPSHOT"
 }
@@ -56,11 +56,11 @@ dependencies {
 loom {
 
 	//apply accesswidener from rusherhack-api
-	for (final def f in zipTree(this.project.configurations.rusherhackApi.singleFile)) {
-		if(f.name == "rusherhack.accesswidener") {
-			accessWidenerPath = f
-		}
-	}
+//	for (final def f in zipTree(this.project.configurations.rusherhackApi.singleFile)) {
+//		if(f.name == "rusherhack.accesswidener") {
+//			accessWidenerPath = f
+//		}
+//	}
 
 	//disable run configs
 	runConfigs.configureEach {
