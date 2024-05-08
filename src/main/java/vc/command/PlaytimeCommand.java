@@ -1,5 +1,9 @@
 package vc.command;
 
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.Style;
 import org.rusherhack.client.api.feature.command.Command;
 import org.rusherhack.client.api.feature.command.arg.PlayerReference;
 import org.rusherhack.client.api.utils.ChatUtils;
@@ -25,11 +29,27 @@ public class PlaytimeCommand extends Command {
     public String playtime(final PlayerReference player) {
         ForkJoinPool.commonPool().execute(() -> {
             var playtime = this.api.getPlaytime(player);
-            var out = player.name() + " Playtime\n" +
-                playtime.map(
-                    pt -> formatDuration(Duration.ofSeconds(pt.playtimeSeconds())))
-                    .orElse("Error: " + player.name() + " not found!");
-            ChatUtils.print(out);
+            if (playtime.isEmpty()) {
+                ChatUtils.print("Error: " + player.name() + " not found!");
+                return;
+            }
+            var result = Component.empty()
+                .append(Component.literal("\nPlaytime")
+                            .withStyle(Style.EMPTY
+                                           .withBold(true)))
+                .append(Component.literal("\nPlayer")
+                            .withStyle(Style.EMPTY
+                                           .withBold(true)
+                            ))
+                .append(Component.literal("\n" + player.name())
+                            .withStyle(Style.EMPTY
+                                           .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://namemc.com/profile/" + player.name()))
+                                           .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Click to view profile")))))
+                .append(Component.literal("\nPlaytime")
+                            .withStyle(Style.EMPTY
+                                           .withBold(true)))
+                .append(Component.literal("\n" + formatDuration(Duration.ofSeconds(playtime.get().playtimeSeconds()))));
+            ChatUtils.print(result);
         });
         return null;
     }

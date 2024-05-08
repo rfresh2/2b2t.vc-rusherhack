@@ -1,5 +1,6 @@
 package vc.command;
 
+import net.minecraft.network.chat.Component;
 import org.rusherhack.client.api.feature.command.Command;
 import org.rusherhack.client.api.utils.ChatUtils;
 import org.rusherhack.core.command.annotations.CommandExecutor;
@@ -20,11 +21,14 @@ public class QueueCommand extends Command {
     private String getQueueStatus() {
         ForkJoinPool.commonPool().execute(() -> {
             var queueStatus = this.api.getQueueStatus();
-            var out = queueStatus.map(qs ->
-                                "Regular: " + qs.regular() + " [ETA: " + getQueueEta(qs.regular()) + "]"
-                                    + "\nPrio: " + qs.prio())
-                .orElse("Error: Failed to get queue status!");
-            ChatUtils.print(out);
+            if (queueStatus.isEmpty()) {
+                ChatUtils.print("Error: Failed to get queue status!");
+                return;
+            }
+            var result = Component.empty()
+                .append(Component.literal("\nRegular: " + queueStatus.get().regular()
+                                              + " [ETA: " + getQueueEta(queueStatus.get().regular()) + "]"));
+            ChatUtils.print(result);
         });
         return null;
     }

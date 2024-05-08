@@ -1,5 +1,9 @@
 package vc.command;
 
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.Style;
 import org.rusherhack.client.api.feature.command.Command;
 import org.rusherhack.client.api.feature.command.arg.PlayerReference;
 import org.rusherhack.client.api.utils.ChatUtils;
@@ -24,20 +28,63 @@ public class StatsCommand extends Command {
     private String statsPlayerName(final PlayerReference player) {
         ForkJoinPool.commonPool().execute(() -> {
             var statsResponse = api.getStats(player);
-            var out = statsResponse.map(s ->
-                player.name() + " Stats" +
-                "\nJoins: " + s.joinCount() +
-                "\nLeaves: " + s.leaveCount() +
-                "\nFirst Seen: " + getSeenString(s.firstSeen()) +
-                "\nLast Seen: " + getSeenString(s.lastSeen()) +
-                "\nPlaytime: " + formatDuration(Duration.ofSeconds(s.playtimeSeconds())) +
-                "\nPlaytime (Last 30 Days): " + formatDuration(Duration.ofSeconds(s.playtimeSecondsMonth())) +
-                "\nDeaths: " + s.deathCount() +
-                "\nKills: " + s.killCount() +
-                "\nChats: " + s.chatsCount() +
-                "\nPrio: " + (s.prio() ? "Yes" : "No"))
-                .orElse("Error: " + player.name() + " not found!");
-            ChatUtils.print(out);
+            if (statsResponse.isEmpty()) {
+                ChatUtils.print("Error: " + player.name() + " not found!");
+                return;
+            }
+            var result = Component.empty()
+                .append(Component.literal("\nStats")
+                            .withStyle(Style.EMPTY
+                                           .withBold(true)))
+                .append(Component.literal("\nPlayer")
+                            .withStyle(Style.EMPTY
+                                           .withBold(true)
+                            ))
+                .append(Component.literal("\n" + player.name())
+                            .withStyle(Style.EMPTY
+                                           .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://namemc.com/profile/" + player.name()))
+                                           .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Click to view profile")))))
+                .append(Component.literal("\nJoins")
+                            .withStyle(Style.EMPTY
+                                           .withBold(true)))
+                .append(Component.literal("\n" + statsResponse.get().joinCount()))
+                .append(Component.literal("\nLeaves")
+                            .withStyle(Style.EMPTY
+                                           .withBold(true)))
+                .append(Component.literal("\n" + statsResponse.get().leaveCount()))
+                .append(Component.literal("\nFirst Seen")
+                            .withStyle(Style.EMPTY
+                                           .withBold(true)))
+                .append(Component.literal("\n" + getSeenString(statsResponse.get().firstSeen())))
+                .append(Component.literal("\nLast Seen")
+                            .withStyle(Style.EMPTY
+                                           .withBold(true)))
+                .append(Component.literal("\n" + getSeenString(statsResponse.get().lastSeen())))
+                .append(Component.literal("\nPlaytime")
+                            .withStyle(Style.EMPTY
+                                           .withBold(true)))
+                .append(Component.literal("\n" + formatDuration(Duration.ofSeconds(statsResponse.get().playtimeSeconds()))))
+                .append(Component.literal("\nPlaytime (Last 30 Days")
+                            .withStyle(Style.EMPTY
+                                           .withBold(true)))
+                .append(Component.literal("\n" + formatDuration(Duration.ofSeconds(statsResponse.get().playtimeSecondsMonth()))))
+                .append(Component.literal("\nDeaths")
+                            .withStyle(Style.EMPTY
+                                           .withBold(true))
+                .append(Component.literal("\n" + statsResponse.get().deathCount())))
+                .append(Component.literal("\nKills")
+                            .withStyle(Style.EMPTY
+                                           .withBold(true)))
+                .append(Component.literal("\n" + statsResponse.get().killCount()))
+                .append(Component.literal("\nChats")
+                            .withStyle(Style.EMPTY
+                                           .withBold(true)))
+                .append(Component.literal("\n" + statsResponse.get().chatsCount()))
+                .append(Component.literal("\nPrio")
+                            .withStyle(Style.EMPTY
+                                           .withBold(true)))
+                .append(Component.literal("\n" + (statsResponse.get().prio() ? "Yes" : "No")));
+            ChatUtils.print(result);
         });
         return null;
     }
