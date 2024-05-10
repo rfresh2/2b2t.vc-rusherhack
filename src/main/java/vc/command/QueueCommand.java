@@ -33,8 +33,8 @@ public class QueueCommand extends Command {
         return null;
     }
 
-    public static long getQueueWait(final int queuePos) {
-        return (long) (84.3 * (Math.pow(queuePos, 1.05)));
+    public static long getQueueWait(final Integer queuePos) {
+        return (long) (247 * (Math.pow(queuePos.doubleValue(), 0.885)));
     }
 
     public static String getEtaStringFromSeconds(final long totalSeconds) {
