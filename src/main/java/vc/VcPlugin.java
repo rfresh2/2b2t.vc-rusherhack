@@ -20,7 +20,7 @@ public class VcPlugin extends Plugin {
         final Queue2b2tHudElement queueHud = new Queue2b2tHudElement(api);
         RusherHackAPI.getHudManager().registerFeature(queueHud);
 
-        this.getLogger().info(this.getName() + " " + getPluginVersion() + " loaded!");
+        this.getLogger().info("2b2t.vc Plugin " + getPluginVersion() + " Loaded!");
     }
 
     @Override
