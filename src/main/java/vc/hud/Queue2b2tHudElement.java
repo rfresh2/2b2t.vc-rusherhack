@@ -4,42 +4,33 @@ import net.minecraft.network.chat.Component;
 import org.rusherhack.client.api.feature.hud.ShortListHudElement;
 import org.rusherhack.core.setting.BooleanSetting;
 import vc.api.VcApi;
-import vc.api.model.QueueStatus;
 import vc.util.FormatUtil;
+import vc.util.Queue;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.time.OffsetDateTime;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Stream;
 
 public class Queue2b2tHudElement extends ShortListHudElement {
-
-    private QueueStatus queueStatus = new QueueStatus(OffsetDateTime.now(), 0, 0);
-    private long lastRefreshedEpochS = 0L;
     private final VcApi api;
+    private final Queue queue;
+    private long lastRefreshedEpochS = 0L;
     final BooleanSetting showPrio = new BooleanSetting("Show Prio", true);
     final BooleanSetting showRegular = new BooleanSetting("Show Regular", true);
     final BooleanSetting showUpdatedTime = new BooleanSetting("Show Updated Time", false);
 
-    public Queue2b2tHudElement(final VcApi api) {
+    public Queue2b2tHudElement(final VcApi api, final Queue queue) {
         super("2b2t Queue");
         this.api = api;
+        this.queue = queue;
         registerSettings(showPrio, showRegular, showUpdatedTime);
     }
 
     private void refreshQueueStatus() {
         lastRefreshedEpochS = Instant.now().getEpochSecond();
-        ForkJoinPool.commonPool().execute(() -> {
-            Optional<QueueStatus> status = this.api.getQueueStatus();
-            if (status.isPresent()) {
-                queueStatus = status.get();
-            } else {
-                getLogger().error("Failed refreshing 2b2t queue!");
-            }
-        });
+        ForkJoinPool.commonPool().execute(queue::updateQueueStatus);
     }
 
     @Override
@@ -51,15 +42,15 @@ public class Queue2b2tHudElement extends ShortListHudElement {
         Component prio = null;
         Component updated = null;
         if (showRegular.getValue()) {
-            regular = Component.literal("Regular: " + queueStatus.regular());
+            regular = Component.literal("Regular: " + queue.queueStatus.regular());
         }
         if (showPrio.getValue()) {
-            prio = Component.literal("Prio: " + queueStatus.prio());
+            prio = Component.literal("Prio: " + queue.queueStatus.prio());
         }
         if (showUpdatedTime.getValue()) {
             updated = Component
                 .literal("Updated "
-                             + FormatUtil.formatDuration(Duration.between(queueStatus.time().toInstant(), Instant.now()))
+                             + FormatUtil.formatDuration(Duration.between(queue.queueStatus.time().toInstant(), Instant.now()))
                              + " ago");
         }
         return Stream.of(regular, prio, updated)

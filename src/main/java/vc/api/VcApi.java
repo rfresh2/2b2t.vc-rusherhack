@@ -6,10 +6,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.stream.JsonReader;
 import org.rusherhack.client.api.feature.command.arg.PlayerReference;
 import org.rusherhack.core.logging.ILogger;
-import vc.api.model.PlaytimeResponse;
-import vc.api.model.QueueStatus;
-import vc.api.model.SeenResponse;
-import vc.api.model.StatsResponse;
+import vc.api.model.*;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -54,6 +51,10 @@ public class VcApi {
 
     public Optional<StatsResponse> getStats(final PlayerReference player) {
         return get("https://api.2b2t.vc/stats/player?playerName=" + player.name(), StatsResponse.class);
+    }
+
+    public Optional<QueueEtaEquation> getQueueEtaEquation() {
+        return get("https://api.2b2t.vc/queue/eta-equation", QueueEtaEquation.class);
     }
 
     private <T> Optional<T> get(final String uri, final Class<T> responseType) {

@@ -5,49 +5,36 @@ import org.rusherhack.client.api.feature.command.Command;
 import org.rusherhack.client.api.utils.ChatUtils;
 import org.rusherhack.core.command.annotations.CommandExecutor;
 import vc.api.VcApi;
+import vc.util.Queue;
 
+import java.time.Instant;
 import java.util.concurrent.ForkJoinPool;
 
 public class QueueCommand extends Command {
-
     private final VcApi api;
-    public QueueCommand(final VcApi api) {
+    private final Queue queue;
+
+    public QueueCommand(final VcApi api, final Queue queue) {
         super("queue", "2b2t queue status");
         this.api = api;
+        this.queue = queue;
         addAliases("q");
     }
 
     @CommandExecutor
     private String getQueueStatus() {
         ForkJoinPool.commonPool().execute(() -> {
-            var queueStatus = this.api.getQueueStatus();
-            if (queueStatus.isEmpty()) {
+            queue.updateQueueStatus();
+            queue.updateQueueEtaEquation();
+            if (queue.lastRefreshedQueueStatus == Instant.EPOCH) {
                 ChatUtils.print("Error: Failed to get queue status!");
                 return;
             }
             var result = Component.empty()
-                .append(Component.literal("\nRegular: " + queueStatus.get().regular()
-                                              + " [ETA: " + getQueueEta(queueStatus.get().regular()) + "]"));
+                .append(Component.literal("\nRegular: " + queue.queueStatus.regular()
+                                              + " [ETA: " + queue.getQueueEta(queue.queueStatus.regular()) + "]"));
             ChatUtils.print(result);
         });
         return null;
-    }
-
-    public static long getQueueWait(final Integer queuePos) {
-        return (long) (247 * (Math.pow(queuePos.doubleValue(), 0.885)));
-    }
-
-    public static String getEtaStringFromSeconds(final long totalSeconds) {
-        final int hour = (int) (totalSeconds / 3600);
-        final int minutes = (int) ((totalSeconds / 60) % 60);
-        final int seconds = (int) (totalSeconds % 60);
-        final String hourStr = hour >= 10 ? "" + hour : "0" + hour;
-        final String minutesStr = minutes >= 10 ? "" + minutes : "0" + minutes;
-        final String secondsStr = seconds >= 10 ? "" + seconds : "0" + seconds;
-        return hourStr + ":" + minutesStr + ":" + secondsStr;
-    }
-
-    public static String getQueueEta(final int queuePos) {
-        return getEtaStringFromSeconds(getQueueWait(queuePos));
     }
 }
