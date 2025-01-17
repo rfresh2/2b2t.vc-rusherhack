@@ -8,7 +8,7 @@ buildscript {
 }
 
 plugins {
-	id 'fabric-loom' version '1.6-SNAPSHOT'
+	id 'fabric-loom' version '1.9-SNAPSHOT'
 	id 'maven-publish'
 	id "net.raphimc.class-token-replacer" version "1.0.0"
 }
@@ -24,6 +24,11 @@ configurations {
 	rusherhackApi
 	rusherhackApi.canBeResolved(true)
 	compileOnly.extendsFrom(rusherhackApi)
+	productionRuntime {
+		extendsFrom configurations.minecraftLibraries
+		extendsFrom configurations.loaderLibraries
+		extendsFrom configurations.minecraftRuntimeLibraries
+	}
 }
 
 repositories {
@@ -44,6 +49,8 @@ repositories {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	productionRuntime(modImplementation("net.fabricmc:fabric-loader:0.16.7"))
+	productionRuntime("net.fabricmc:intermediary:1.20.4")
 
 	//mojmap + parchment mappings
 	mappings loom.layered() {
@@ -52,6 +59,44 @@ dependencies {
 	}
 	rusherhackApi "org.rusherhack:rusherhack-api:1.20.4-SNAPSHOT"
 }
+
+tasks.register('runPlugin', JavaExec) {
+	group = "build"
+	dependsOn remapJar, downloadAssets, copyPluginToRunDir
+	classpath.from configurations.productionRuntime
+	mainClass = "net.fabricmc.loader.impl.launch.knot.KnotClient"
+	workingDir = file("run")
+
+	doFirst {
+		classpath.from loom.minecraftProvider.minecraftClientJar
+		workingDir.mkdirs()
+
+		args(
+				"--assetIndex", loom.minecraftProvider.versionInfo.assetIndex().fabricId(loom.minecraftProvider.minecraftVersion()),
+				"--assetsDir", new File(loom.files.userCache, "assets").absolutePath,
+				"--gameDir", workingDir.absolutePath
+		)
+
+		def rusherLoaderJarFile = project.layout.getProjectDirectory().file("lib/rusherhack-loader.jar").asFile
+		if (!rusherLoaderJarFile.exists()) {
+			throw new GradleException("rusherhack-loader.jar must be copied to the lib directory!")
+		}
+		def rusherLoaderJarPath = project.layout.getProjectDirectory().file("lib/rusherhack-loader.jar").asFile.absolutePath
+
+		jvmArgs(
+				"-Drusherhack.enablePlugins=true",
+				"-Dfabric.addMods=${rusherLoaderJarPath}",
+		)
+	}
+}
+
+tasks.register("copyPluginToRunDir", Copy) {
+	group = "build"
+	dependsOn remapJar
+	from remapJar.outputs
+	into file("run/rusherhack/plugins")
+}
+
 
 loom {
 
