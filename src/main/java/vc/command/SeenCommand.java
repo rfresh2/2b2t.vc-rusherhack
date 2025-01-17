@@ -1,5 +1,6 @@
 package vc.command;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
@@ -31,25 +32,27 @@ public class SeenCommand extends Command {
                 return;
             }
             var result = Component.empty()
-                .append(Component.literal("\nSeen")
+                .append(Component.literal("Seen")
                             .withStyle(Style.EMPTY
                                            .withBold(true)))
-                .append(Component.literal("\nPlayer")
+                .append(Component.literal("\nPlayer: ")
                             .withStyle(Style.EMPTY
                                            .withBold(true)
-                            ))
-                .append(Component.literal("\n" + player.name())
+                                           .withColor(ChatFormatting.GRAY)))
+                .append(Component.literal(player.name())
                             .withStyle(Style.EMPTY
                                            .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://namemc.com/profile/" + player.name()))
                                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Click to view profile")))))
-                .append(Component.literal("\nFirst Seen")
+                .append(Component.literal("\nFirst Seen: ")
                             .withStyle(Style.EMPTY
-                                           .withBold(true)))
-                .append(Component.literal("\n" + getSeenString(apiResponse.get().firstSeen())))
-                .append(Component.literal("\nLast Seen")
+                                           .withBold(true)
+                                           .withColor(ChatFormatting.GRAY)))
+                .append(Component.literal(getSeenString(apiResponse.get().firstSeen())))
+                .append(Component.literal("\nLast Seen: ")
                             .withStyle(Style.EMPTY
-                                           .withBold(true)))
-                .append(Component.literal("\n" + getSeenString(apiResponse.get().lastSeen())));
+                                           .withBold(true)
+                                           .withColor(ChatFormatting.GRAY)))
+                .append(Component.literal(getSeenString(apiResponse.get().lastSeen())));
             ChatUtils.print(result);
         });
         return null;

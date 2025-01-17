@@ -1,5 +1,6 @@
 package vc.command;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
@@ -34,21 +35,22 @@ public class PlaytimeCommand extends Command {
                 return;
             }
             var result = Component.empty()
-                .append(Component.literal("\nPlaytime")
+                .append(Component.literal("Playtime")
                             .withStyle(Style.EMPTY
                                            .withBold(true)))
-                .append(Component.literal("\nPlayer")
+                .append(Component.literal("\nPlayer: ")
                             .withStyle(Style.EMPTY
                                            .withBold(true)
-                            ))
-                .append(Component.literal("\n" + player.name())
+                                           .withColor(ChatFormatting.GRAY)))
+                .append(Component.literal(player.name())
                             .withStyle(Style.EMPTY
                                            .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://namemc.com/profile/" + player.name()))
                                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Click to view profile")))))
-                .append(Component.literal("\nPlaytime")
+                .append(Component.literal("\nPlaytime: ")
                             .withStyle(Style.EMPTY
-                                           .withBold(true)))
-                .append(Component.literal("\n" + formatDuration(Duration.ofSeconds(playtime.get().playtimeSeconds()))));
+                                           .withBold(true)
+                                           .withColor(ChatFormatting.GRAY)))
+                .append(Component.literal(formatDuration(Duration.ofSeconds(playtime.get().playtimeSeconds()))));
             ChatUtils.print(result);
         });
         return null;
