@@ -11,6 +11,7 @@ import org.rusherhack.client.api.utils.ChatUtils;
 import org.rusherhack.core.command.annotations.CommandExecutor;
 import vc.api.VcApi;
 
+import java.net.URI;
 import java.time.Duration;
 import java.util.concurrent.ForkJoinPool;
 
@@ -44,8 +45,8 @@ public class PlaytimeCommand extends Command {
                                            .withColor(ChatFormatting.GRAY)))
                 .append(Component.literal(player.name())
                             .withStyle(Style.EMPTY
-                                           .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://namemc.com/profile/" + player.name()))
-                                           .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Click to view profile")))))
+                                .withClickEvent(new ClickEvent.OpenUrl(URI.create("https://namemc.com/profile/" + player.name())))
+                                .withHoverEvent(new HoverEvent.ShowText(Component.literal("Click to view profile")))))
                 .append(Component.literal("\nPlaytime: ")
                             .withStyle(Style.EMPTY
                                            .withBold(true)
