@@ -19,6 +19,7 @@ import static vc.util.FormatUtil.getSeenString;
 
 public class StatsCommand extends Command {
     private final VcApi api;
+
     public StatsCommand(final VcApi api) {
         super("stats", "Gets the 2b2t stats of a player");
         this.api = api;
@@ -35,66 +36,69 @@ public class StatsCommand extends Command {
             }
             var result = Component.empty()
                 .append(Component.literal("Stats")
-                            .withStyle(Style.EMPTY
-                                           .withBold(true)))
+                    .withStyle(Style.EMPTY
+                        .withBold(true)))
                 .append(Component.literal("\nPlayer: ")
-                            .withStyle(Style.EMPTY
-                                           .withBold(true)
-                                           .withColor(ChatFormatting.GRAY)
-                            ))
+                    .withStyle(Style.EMPTY
+                        .withBold(true)
+                        .withColor(ChatFormatting.GRAY)
+                    ))
                 .append(Component.literal(player.name())
-                            .withStyle(Style.EMPTY
-                                           .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://namemc.com/profile/" + player.name()))
-                                           .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Click to view profile")))))
+                    .withStyle(Style.EMPTY
+                        .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
+                            "https://namemc.com/profile/" + player.name()))
+                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            Component.literal("Click to view profile")))))
                 .append(Component.literal("\nJoins: ")
-                            .withStyle(Style.EMPTY
-                                           .withBold(true)
-                                           .withColor(ChatFormatting.GRAY)))
-                .append(Component.literal(""+statsResponse.get().joinCount()))
+                    .withStyle(Style.EMPTY
+                        .withBold(true)
+                        .withColor(ChatFormatting.GRAY)))
+                .append(Component.literal("" + statsResponse.get().joinCount()))
                 .append(Component.literal("\nLeaves: ")
-                            .withStyle(Style.EMPTY
-                                           .withBold(true)
-                                           .withColor(ChatFormatting.GRAY)))
-                .append(Component.literal(""+statsResponse.get().leaveCount()))
+                    .withStyle(Style.EMPTY
+                        .withBold(true)
+                        .withColor(ChatFormatting.GRAY)))
+                .append(Component.literal("" + statsResponse.get().leaveCount()))
                 .append(Component.literal("\nFirst Seen: ")
-                            .withStyle(Style.EMPTY
-                                           .withBold(true)
-                                           .withColor(ChatFormatting.GRAY)))
+                    .withStyle(Style.EMPTY
+                        .withBold(true)
+                        .withColor(ChatFormatting.GRAY)))
                 .append(Component.literal(getSeenString(statsResponse.get().firstSeen())))
                 .append(Component.literal("\nLast Seen: ")
-                            .withStyle(Style.EMPTY
-                                           .withBold(true)
-                                           .withColor(ChatFormatting.GRAY)))
+                    .withStyle(Style.EMPTY
+                        .withBold(true)
+                        .withColor(ChatFormatting.GRAY)))
                 .append(Component.literal(getSeenString(statsResponse.get().lastSeen())))
                 .append(Component.literal("\nPlaytime: ")
-                            .withStyle(Style.EMPTY
-                                           .withBold(true)
-                                           .withColor(ChatFormatting.GRAY)))
+                    .withStyle(Style.EMPTY
+                        .withBold(true)
+                        .withColor(ChatFormatting.GRAY)))
                 .append(Component.literal(formatDuration(Duration.ofSeconds(statsResponse.get().playtimeSeconds()))))
                 .append(Component.literal("\nPlaytime (Last 30 Days): ")
-                            .withStyle(Style.EMPTY
-                                           .withBold(true)
-                                           .withColor(ChatFormatting.GRAY)))
-                .append(Component.literal(formatDuration(Duration.ofSeconds(statsResponse.get().playtimeSecondsMonth()))))
+                    .withStyle(Style.EMPTY
+                        .withBold(true)
+                        .withColor(ChatFormatting.GRAY)))
+                .append(Component.literal(formatDuration(Duration.ofSeconds(statsResponse.get()
+                    .playtimeSecondsMonth()))))
                 .append(Component.literal("\nDeaths: ")
-                            .withStyle(Style.EMPTY
-                                           .withBold(true)
-                                           .withColor(ChatFormatting.GRAY))
-                .append(Component.literal(""+statsResponse.get().deathCount())))
+                    .withStyle(Style.EMPTY
+                        .withBold(true)
+                        .withColor(ChatFormatting.GRAY))
+                    .append(Component.literal("" + statsResponse.get().deathCount())))
                 .append(Component.literal("\nKills: ")
-                            .withStyle(Style.EMPTY
-                                           .withBold(true)
-                                           .withColor(ChatFormatting.GRAY)))
-                .append(Component.literal(""+statsResponse.get().killCount()))
+                    .withStyle(Style.EMPTY
+                        .withBold(true)
+                        .withColor(ChatFormatting.GRAY)))
+                .append(Component.literal("" + statsResponse.get().killCount()))
                 .append(Component.literal("\nChats: ")
-                            .withStyle(Style.EMPTY
-                                           .withBold(true)
-                                           .withColor(ChatFormatting.GRAY)))
-                .append(Component.literal(""+statsResponse.get().chatsCount()))
+                    .withStyle(Style.EMPTY
+                        .withBold(true)
+                        .withColor(ChatFormatting.GRAY)))
+                .append(Component.literal("" + statsResponse.get().chatsCount()))
                 .append(Component.literal("\nPrio: ")
-                            .withStyle(Style.EMPTY
-                                           .withBold(true)
-                                           .withColor(ChatFormatting.GRAY)))
+                    .withStyle(Style.EMPTY
+                        .withBold(true)
+                        .withColor(ChatFormatting.GRAY)))
                 .append(Component.literal(statsResponse.get().prio() ? "Yes" : "No"));
             ChatUtils.print(result);
         });

@@ -17,6 +17,7 @@ import static vc.util.FormatUtil.getSeenString;
 
 public class SeenCommand extends Command {
     private final VcApi api;
+
     public SeenCommand(final VcApi api) {
         super("seen", "Gets when a player was first and last seen on 2b2t");
         this.api = api;
@@ -33,25 +34,27 @@ public class SeenCommand extends Command {
             }
             var result = Component.empty()
                 .append(Component.literal("Seen")
-                            .withStyle(Style.EMPTY
-                                           .withBold(true)))
+                    .withStyle(Style.EMPTY
+                        .withBold(true)))
                 .append(Component.literal("\nPlayer: ")
-                            .withStyle(Style.EMPTY
-                                           .withBold(true)
-                                           .withColor(ChatFormatting.GRAY)))
+                    .withStyle(Style.EMPTY
+                        .withBold(true)
+                        .withColor(ChatFormatting.GRAY)))
                 .append(Component.literal(player.name())
-                            .withStyle(Style.EMPTY
-                                           .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://namemc.com/profile/" + player.name()))
-                                           .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Click to view profile")))))
+                    .withStyle(Style.EMPTY
+                        .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
+                            "https://namemc.com/profile/" + player.name()))
+                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            Component.literal("Click to view profile")))))
                 .append(Component.literal("\nFirst Seen: ")
-                            .withStyle(Style.EMPTY
-                                           .withBold(true)
-                                           .withColor(ChatFormatting.GRAY)))
+                    .withStyle(Style.EMPTY
+                        .withBold(true)
+                        .withColor(ChatFormatting.GRAY)))
                 .append(Component.literal(getSeenString(apiResponse.get().firstSeen())))
                 .append(Component.literal("\nLast Seen: ")
-                            .withStyle(Style.EMPTY
-                                           .withBold(true)
-                                           .withColor(ChatFormatting.GRAY)))
+                    .withStyle(Style.EMPTY
+                        .withBold(true)
+                        .withColor(ChatFormatting.GRAY)))
                 .append(Component.literal(getSeenString(apiResponse.get().lastSeen())));
             ChatUtils.print(result);
         });

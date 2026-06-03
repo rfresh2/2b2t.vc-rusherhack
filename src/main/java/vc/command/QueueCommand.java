@@ -32,7 +32,7 @@ public class QueueCommand extends Command {
             }
             var result = Component.empty()
                 .append(Component.literal("Regular: " + queue.queueStatus.regular()
-                                              + " [ETA: " + queue.getQueueEta(queue.queueStatus.regular()) + "]"));
+                    + " [ETA: " + queue.getQueueEta(queue.queueStatus.regular()) + "]"));
             ChatUtils.print(result);
         });
         return null;

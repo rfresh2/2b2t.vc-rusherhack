@@ -36,20 +36,20 @@ public class PlaytimeCommand extends Command {
             }
             var result = Component.empty()
                 .append(Component.literal("Playtime")
-                            .withStyle(Style.EMPTY
-                                           .withBold(true)))
+                    .withStyle(Style.EMPTY
+                        .withBold(true)))
                 .append(Component.literal("\nPlayer: ")
-                            .withStyle(Style.EMPTY
-                                           .withBold(true)
-                                           .withColor(ChatFormatting.GRAY)))
+                    .withStyle(Style.EMPTY
+                        .withBold(true)
+                        .withColor(ChatFormatting.GRAY)))
                 .append(Component.literal(player.name())
-                            .withStyle(Style.EMPTY
-                                           .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://namemc.com/profile/" + player.name()))
-                                           .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Click to view profile")))))
+                    .withStyle(Style.EMPTY
+                        .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://namemc.com/profile/" + player.name()))
+                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Click to view profile")))))
                 .append(Component.literal("\nPlaytime: ")
-                            .withStyle(Style.EMPTY
-                                           .withBold(true)
-                                           .withColor(ChatFormatting.GRAY)))
+                    .withStyle(Style.EMPTY
+                        .withBold(true)
+                        .withColor(ChatFormatting.GRAY)))
                 .append(Component.literal(formatDuration(Duration.ofSeconds(playtime.get().playtimeSeconds()))));
             ChatUtils.print(result);
         });
