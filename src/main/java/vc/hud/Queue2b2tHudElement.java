@@ -50,8 +50,8 @@ public class Queue2b2tHudElement extends ShortListHudElement {
         if (showUpdatedTime.getValue()) {
             updated = Component
                 .literal("Updated "
-                             + FormatUtil.formatDuration(Duration.between(queue.queueStatus.time().toInstant(), Instant.now()))
-                             + " ago");
+                    + FormatUtil.formatDuration(Duration.between(queue.queueStatus.time().toInstant(), Instant.now()))
+                    + " ago");
         }
         return Stream.of(regular, prio, updated)
             .filter(Objects::nonNull)
